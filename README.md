@@ -1,79 +1,47 @@
-# self-healing-data-pipeline-agent
-detects data quality issues &amp; drift → updates config → reruns pipeline successfully.
-# 🧠 Self-Healing Data Pipeline Agent (with Incidents & Dashboard)
+#  Self-Healing Data Pipeline Agent (with Incidents & Dashboard)
 
-An intelligent **Self-Healing Data Pipeline** that automatically:
+An intelligent, self-healing data pipeline framework that:
 
-- Detects data quality issues & schema / data drift
-- Updates configuration policies (like `max_null_fraction`, `required`, `row_count_min`)
-- Reruns the pipeline successfully
-- Logs every run as an **incident**
-- Exposes a **Streamlit dashboard** to inspect failures and auto-healing actions
+-  Detects data quality issues & data/schema drift  
+-  Automatically adjusts pipeline configuration (null tolerances, required-column flags, row counts)  
+-  Re-runs pipelines post-fix  
+-  Logs every run (success / failure / healing) as incidents  
+-  Provides a Streamlit dashboard to visualize issues & healing actions  
 
-This is designed as a **recruiter-level project** for Data Engineering + Data Quality + Agentic Automation.
+Designed as a "recruiter-grade portfolio project" for Data Engineering + Data Quality + Agentic Automation.  
 
 ---
 
-## 🚀 Tech Stack
+##  Why this matters
 
-- **Python 3.11**
-- **DuckDB** – local analytics warehouse
-- **Pandas** – ETL transformations
-- **PyYAML** – config-driven pipelines
-- **Rich** – beautiful logging
-- **Streamlit** – incidents dashboard
-- Runs cleanly in **GitHub Codespaces** via `.devcontainer`
+In real data engineering environments:  
+- Data quality issues, schema drift, and upstream changes frequently break pipelines.  
+- Manually fixing config, rerunning pipelines, and documenting failures is time-consuming and error-prone.  
+- This project automates that entire “fail → heal → rerun → log” cycle — giving companies reliability, resilience, and observability.
 
 ---
 
-## 🧩 High-Level Flow
+##  Tech Stack
 
-1. **Baseline run (clean data)**  
-   - Reads `data/raw/customers_v1.csv`
-   - Enforces strict data quality rules
-   - Builds initial drift profile (numeric means & std)
+| Layer                            | Technology / Library                  |
+|----------------------------------|---------------------------------------|
+| Orchestration & Execution        | Python 3.11, plain scripts            |
+| Data Storage / Warehouse         | DuckDB (local)                        |
+| ETL & Transformations            | Pandas                                |
+| Config Management                | YAML (PyYAML)                         |
+| Data Quality & Drift Detection   | Custom rules + drift profiling        |
+| Logging & Observability          | Rich (console logs), CSV incident log |
+| Dashboard / UI                   | Streamlit                             |
 
-2. **Drifted / broken run**  
-   - Switches to `data/raw/customers_v2_broken.csv`
-   - Data quality fails due to:
-     - High nulls in `age`
-     - Invalid value `"thirty"`
-
-3. **Self-Healing Agent**  
-   - Reads the failure report
-   - Automatically updates:
-     - `columns.age.max_null_fraction`
-     - (if needed) `required` flags for missing columns
-     - (if needed) `quality.row_count_min`
-   - Writes new config back to disk
-
-4. **Recovered run**  
-   - Reruns ETL + Quality + Drift
-   - Pipeline now **succeeds** thanks to auto-tuned config
-
-5. **Incidents Dashboard**  
-   - All runs (success, failed, healed) are logged to `data/metadata/incidents.csv`
-   - `app/dashboard.py` visualizes:
-     - Run history
-     - Status by stage
-     - Issues JSON
-     - Healing actions JSON
+Runs cleanly in "GitHub Codespaces" using '.devcontainer'.
 
 ---
 
-## 🛠️ Step 1 – Use This in GitHub Codespaces
-
-1. Create a new GitHub repository.
-2. Copy the entire structure & files from this project into your repo.
-3. Commit & push.
-4. On GitHub, click **Code → Codespaces → Create codespace on main**.
-5. Wait for the container to build (it will install `requirements.txt` automatically).
-
----
-
-## ▶️ Step 2 – Run the Self-Healing Demo
-
-In the Codespaces terminal, from the project root:
+## 🚀 Quick Start (Codespaces / Local)
 
 ```bash
-python -m src.pipeline_runner
+git clone https://github.com/OMKARDESHM/self-healing-data-pipeline-agent.git
+cd self-healing-data-pipeline-agent
+pip install -r requirements.txt     # or let Codespaces handle this
+python -m src.pipeline_runner       # Run full demo: baseline → broken run → auto-heal → final run
+streamlit run app/dashboard.py      # Launch dashboard to view incidents & healing logs
