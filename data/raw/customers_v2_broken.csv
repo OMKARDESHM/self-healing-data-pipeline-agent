@@ -1,0 +1,6 @@
+customer_id,name,age,country
+1,Alice,25,India
+2,Bob,,USA
+3,Charlie,thirty,UK
+4,Deepa,42,India
+5,Evan,,Canada

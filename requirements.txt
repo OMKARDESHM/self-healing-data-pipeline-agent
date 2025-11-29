@@ -1,0 +1,5 @@
+pandas
+duckdb
+pyyaml
+rich
+streamlit

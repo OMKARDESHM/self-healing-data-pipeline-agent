@@ -1,0 +1,22 @@
+warehouse_path: data/warehouse.duckdb
+table_name: customers
+source_path: data/raw/customers_v2_broken.csv
+columns:
+  customer_id:
+    type: int
+    required: true
+  name:
+    type: string
+    required: true
+  age:
+    type: int
+    required: false
+    max_null_fraction: 0.65
+  country:
+    type: string
+    required: false
+quality:
+  row_count_min: 1
+drift:
+  profile_path: data/metadata/reference_profile.json
+  mean_relative_tolerance: 0.5
